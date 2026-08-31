@@ -3,32 +3,37 @@ from selenium.webdriver.support import expected_conditions
 
 from generators import generate_email, generate_password
 from locators import RegistrationLocators
+from data import Data, Urls
 
 
-def test_successful_registration(driver):
-    driver.get("https://stellarburgers.education-services.ru/register")
+class TestRegistration:
 
-    driver.find_element(*RegistrationLocators.NAME_FIELD).send_keys("Tatiana")
+    def test_successful_registration(self, driver):
+        driver.get(Urls.REGISTER_URL)
 
-    driver.find_element(*RegistrationLocators.EMAIL_FIELD).send_keys(generate_email())
+        driver.find_element(*RegistrationLocators.NAME_FIELD).send_keys("Tatiana")
 
-    driver.find_element(*RegistrationLocators.PASSWORD_FIELD).send_keys(generate_password())
+        driver.find_element(*RegistrationLocators.EMAIL_FIELD).send_keys(generate_email())
 
-    driver.find_element(*RegistrationLocators.REGISTER_BUTTON).click()
+        driver.find_element(*RegistrationLocators.PASSWORD_FIELD).send_keys(generate_password())
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/login"))
+        driver.find_element(*RegistrationLocators.REGISTER_BUTTON).click()
 
-def test_registration_with_invalid_password(driver):
-    driver.get("https://stellarburgers.education-services.ru/register")
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.LOGIN_URL))
 
-    driver.find_element(*RegistrationLocators.NAME_FIELD).send_keys("Tatiana")
+        assert driver.current_url == Urls.LOGIN_URL
 
-    driver.find_element(*RegistrationLocators.EMAIL_FIELD).send_keys(generate_email())
+    def test_registration_with_invalid_password(self, driver):
+        driver.get(Urls.REGISTER_URL)
 
-    driver.find_element(*RegistrationLocators.PASSWORD_FIELD).send_keys("12345")
+        driver.find_element(*RegistrationLocators.NAME_FIELD).send_keys("Tatiana")
 
-    driver.find_element(*RegistrationLocators.REGISTER_BUTTON).click()
+        driver.find_element(*RegistrationLocators.EMAIL_FIELD).send_keys(generate_email())
 
-    error_message = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(RegistrationLocators.PASSWORD_ERROR))
+        driver.find_element(*RegistrationLocators.PASSWORD_FIELD).send_keys("12345")
 
-    assert error_message.is_displayed()
+        driver.find_element(*RegistrationLocators.REGISTER_BUTTON).click()
+
+        error_message = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(RegistrationLocators.PASSWORD_ERROR))
+
+        assert error_message.is_displayed()

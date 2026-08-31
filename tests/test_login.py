@@ -1,5 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from data import Data, Urls
 
 from locators import (
     MainPageLocators,
@@ -8,67 +9,76 @@ from locators import (
     ForgotPasswordLocators
 )
 
+class TestLogin:
 
-def test_login_from_main_page(driver):
-    driver.get("https://stellarburgers.education-services.ru/")
+    def test_login_from_main_page(self, driver):
+        driver.get(Urls.BASE_URL)
 
-    driver.find_element(*MainPageLocators.LOGIN_BUTTON).click()
+        driver.find_element(*MainPageLocators.LOGIN_BUTTON).click()
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/login"))
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.LOGIN_URL))
 
-    driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys("tatianat53_123@mail.ru")
+        driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys(Data.EMAIL)
 
-    driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys("12345qwer")
+        driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys(Data.PASSWORD)
 
-    driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
+        driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
 
-def test_login_from_personal_account(driver):
-    driver.get("https://stellarburgers.education-services.ru/")
+        assert driver.current_url == "https://stellarburgers.education-services.ru/"
 
-    driver.find_element(*MainPageLocators.PERSONAL_ACCOUNT_BUTTON).click()
+    def test_login_from_personal_account(self, driver):
+        driver.get(Urls.BASE_URL)
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/login"))
+        driver.find_element(*MainPageLocators.PERSONAL_ACCOUNT_BUTTON).click()
 
-    driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys("tatianat53_123@mail.ru")
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.LOGIN_URL))
 
-    driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys("12345qwer")
+        driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys(Data.EMAIL)
 
-    driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
+        driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys(Data.PASSWORD)
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
+        driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
 
-def test_login_from_registration(driver):
-    driver.get("https://stellarburgers.education-services.ru/register")
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
 
-    driver.find_element(*RegistrationLocators.LOGIN_BUTTON).click()
+        assert driver.current_url == "https://stellarburgers.education-services.ru/"
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/login"))
+    def test_login_from_registration(self, driver):
+        driver.get(Urls.REGISTER_URL)
 
-    driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys("tatianat53_123@mail.ru")
+        driver.find_element(*RegistrationLocators.LOGIN_BUTTON).click()
 
-    driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys("12345qwer")
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.LOGIN_URL))
 
-    driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
+        driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys(Data.EMAIL)
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
+        driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys(Data.PASSWORD)
 
-def test_login_from_forgot_password(driver):
-    driver.get("https://stellarburgers.education-services.ru/login")
+        driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
 
-    driver.find_element(*LoginLocators.FORGOT_PASSWORD_BUTTON).click()
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/forgot-password"))
+        assert driver.current_url == "https://stellarburgers.education-services.ru/"
 
-    driver.find_element(*ForgotPasswordLocators.LOGIN_BUTTON).click()
+    def test_login_from_forgot_password(self, driver):
+        driver.get(Urls.LOGIN_URL)
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/login"))
+        driver.find_element(*LoginLocators.FORGOT_PASSWORD_BUTTON).click()
 
-    driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys("tatianat53_123@mail.ru")
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.FORGOT_PASSWORD_URL))
 
-    driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys("12345qwer")
+        driver.find_element(*ForgotPasswordLocators.LOGIN_BUTTON).click()
 
-    driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be(Urls.LOGIN_URL))
 
-    WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
+        driver.find_element(*LoginLocators.EMAIL_FIELD).send_keys(Data.EMAIL)
+
+        driver.find_element(*LoginLocators.PASSWORD_FIELD).send_keys(Data.PASSWORD)
+
+        driver.find_element(*LoginLocators.LOGIN_BUTTON).click()
+
+        WebDriverWait(driver, 3).until(expected_conditions.url_to_be("https://stellarburgers.education-services.ru/"))
+
+        assert driver.current_url == "https://stellarburgers.education-services.ru/"
